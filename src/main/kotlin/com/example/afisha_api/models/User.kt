@@ -13,7 +13,7 @@ class User(
         var email: String,
         var password: String,
         @Enumerated(EnumType.STRING)
-        val role: Role = Role.ROLE_USER,
+        var role: Role = Role.ROLE_USER,
 
         @ManyToMany(fetch = FetchType.EAGER)
         @JoinTable(name = "user_events",
@@ -25,5 +25,7 @@ class User(
 
     enum class Role {
         ROLE_USER,
+        ORGANIZER,
+        ADMIN
     }
 }

@@ -13,4 +13,10 @@ interface UserService {
 
     fun getUserEvents(email: String): List<EventVO>
 
+    fun applyOrganizer(email: String)
+
+    fun exitEvent(eventId: Long)
+
+    fun approveOrganizer(email: String)
+
 }

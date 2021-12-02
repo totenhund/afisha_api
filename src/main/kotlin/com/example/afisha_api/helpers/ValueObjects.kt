@@ -10,11 +10,12 @@ data class EventVO(
         var description: String,
         var date: String,
         var numberParticipants: String,
-        var posterUrl: String
+        var posterUrl: String,
+        var status: Event.Status
 ) {
     companion object {
         fun buildFrom(event: Event): EventVO {
-            return EventVO(event.id, event.title, event.ageRestriction, event.description, event.date, event.numberParticipants, event.posterUrl)
+            return EventVO(event.id, event.title, event.ageRestriction, event.description, event.date, event.numberParticipants, event.posterUrl, event.status)
         }
     }
 }
@@ -32,11 +33,12 @@ data class UserVO(
         var firstName: String,
         var secondName: String,
         var email: String,
-        var password: String
+        var password: String,
+        var role: User.Role
 ) {
     companion object {
         fun buildFrom(user: User): UserVO {
-            return UserVO(user.firstName, user.secondName, user.email, user.password)
+            return UserVO(user.firstName, user.secondName, user.email, user.password, user.role)
         }
     }
 }

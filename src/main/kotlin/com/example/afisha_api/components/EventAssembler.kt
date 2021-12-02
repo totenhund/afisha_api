@@ -14,7 +14,8 @@ class EventAssembler {
                 event.description,
                 event.date,
                 event.numberParticipants,
-                event.posterUrl
+                event.posterUrl,
+                event.status
         )
     }
 }

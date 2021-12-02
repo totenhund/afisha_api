@@ -4,8 +4,10 @@ import com.example.afisha_api.exceptions.ForbiddenException
 import com.example.afisha_api.helpers.EventVO
 import com.example.afisha_api.helpers.UserVO
 import com.example.afisha_api.models.Event
+import com.example.afisha_api.models.OrganizerSubmission
 import com.example.afisha_api.models.User
 import com.example.afisha_api.repositories.EventRepository
+import com.example.afisha_api.repositories.SubmissionRepository
 import com.example.afisha_api.repositories.UserRepository
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service
 class UserServiceImpl(
         private val repository: UserRepository,
         private val eventsRepository: EventRepository,
+        private val submissionRepository: SubmissionRepository,
         private val passwordEncoder: PasswordEncoder
 ) : UserService {
     override fun existsEmail(email: String): Boolean {
@@ -62,6 +65,22 @@ class UserServiceImpl(
 
         return events
 
+    }
+
+    override fun applyOrganizer(email: String) {
+        submissionRepository.save(OrganizerSubmission(userEmail = email))
+    }
+
+    override fun exitEvent(eventId: Long) {
+
+    }
+
+    override fun approveOrganizer(email: String) {
+        val user = repository.findByEmail(email)
+        user?.let {
+            it.role = User.Role.ORGANIZER
+            repository.save(it)
+        }
     }
 
 }

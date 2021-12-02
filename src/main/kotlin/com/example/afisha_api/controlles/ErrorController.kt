@@ -3,6 +3,7 @@ package com.example.afisha_api.controlles
 import com.example.afisha_api.exceptions.ForbiddenException
 import com.example.afisha_api.exceptions.ObjectNotFoundException
 import com.example.afisha_api.exceptions.ServerErrorException
+import io.swagger.annotations.ApiOperation
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpStatus
 import org.springframework.http.converter.HttpMessageNotReadableException
@@ -21,6 +22,7 @@ import javax.validation.ValidationException
 
 
 @ControllerAdvice
+@ApiOperation(value = "This controller is used to process errors", hidden = true)
 class ErrorController(
         private val authFailureHandler: AuthenticationFailureHandler,
 ) {

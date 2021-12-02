@@ -8,4 +8,8 @@ interface EventService {
     fun getAllEvents(): List<Event>
 
     fun getEventById(id: Long): Event?
+
+    fun getApproved(): List<Event>
+
+    fun getNotApproved(): List<Event>
 }

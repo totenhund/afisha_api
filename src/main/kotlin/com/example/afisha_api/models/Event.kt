@@ -15,5 +15,12 @@ class Event(
         var numberParticipants: String,
         var posterUrl: String,
         @ManyToMany(mappedBy = "events")
-        var participants: MutableList<User>? = null
-)
+        var participants: MutableList<User>? = null,
+        var status: Status
+) {
+        enum class Status{
+                APPROVED,
+                NOT_APPROVED
+        }
+}
+

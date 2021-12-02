@@ -20,5 +20,17 @@ class EventServiceImpl(val repository: EventRepository) : EventService {
         return repository.findById(id).orElse(null)
     }
 
+    override fun getApproved(): List<Event> {
+        return repository.findAll().toList().filter {
+            it.status == Event.Status.APPROVED
+        }
+    }
+
+    override fun getNotApproved(): List<Event> {
+        return repository.findAll().toList().filter {
+            it.status == Event.Status.NOT_APPROVED
+        }
+    }
+
 
 }

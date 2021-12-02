@@ -69,4 +69,6 @@ class SecurityApiConfig(
         services.setTokenValiditySeconds(Int.MAX_VALUE)
         return services
     }
+
+
 }
