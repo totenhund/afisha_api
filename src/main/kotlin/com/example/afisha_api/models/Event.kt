@@ -14,6 +14,7 @@ class Event(
         var date: String,
         var numberParticipants: String,
         var posterUrl: String,
+        var organizerEmail: String,
         @ManyToMany(mappedBy = "events")
         var participants: MutableList<User>? = null,
         var status: Status,

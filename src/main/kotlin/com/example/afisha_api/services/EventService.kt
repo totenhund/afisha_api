@@ -9,6 +9,8 @@ interface EventService {
 
     fun getAllEvents(): List<Event>
 
+    fun getOrganizerEvent(email: String): List<Event>
+
     fun getEventById(id: Long): Event?
 
     fun getApproved(): List<Event>

@@ -28,6 +28,14 @@ class EventController(val eventService: EventService, val eventAssembler: EventA
         })
     }
 
+    @GetMapping
+    @RequestMapping("get_all/{email}", method = [RequestMethod.GET])
+    fun getOrganizerEvents(@PathVariable("email") email: String): ResponseEntity<List<EventVO>> {
+        return ResponseEntity.ok(eventService.getOrganizerEvent(email).map {
+            eventAssembler.toEventVO(it)
+        })
+    }
+
     @PostMapping
     @RequestMapping("/add_event", method = [RequestMethod.POST])
     fun addEvent(@Validated @RequestBody event: Event): ResponseEntity<EventVO> {
@@ -44,7 +52,7 @@ class EventController(val eventService: EventService, val eventAssembler: EventA
 
     @GetMapping
     @RequestMapping("/get_approved", method = [RequestMethod.GET])
-    fun approvedEvents(): ResponseEntity<List<EventVO>>{
+    fun approvedEvents(): ResponseEntity<List<EventVO>> {
         return ResponseEntity.ok(eventService.getApproved().map {
             eventAssembler.toEventVO(it)
         })
@@ -52,7 +60,7 @@ class EventController(val eventService: EventService, val eventAssembler: EventA
 
     @GetMapping
     @RequestMapping("/get_not_approved", method = [RequestMethod.GET])
-    fun notApprovedEvents(): ResponseEntity<List<EventVO>>{
+    fun notApprovedEvents(): ResponseEntity<List<EventVO>> {
         return ResponseEntity.ok(eventService.getNotApproved().map {
             eventAssembler.toEventVO(it)
         })
@@ -60,18 +68,18 @@ class EventController(val eventService: EventService, val eventAssembler: EventA
 
     @PostMapping
     @RequestMapping("/{event_id}", method = [RequestMethod.POST])
-    fun deleteEvent(@PathVariable("event_id") eventId: Long): ResponseEntity<Result>{
+    fun deleteEvent(@PathVariable("event_id") eventId: Long): ResponseEntity<Result> {
         eventService.deleteEvent(eventId)
         return ResponseEntity.ok(Result("Event deleted"))
     }
 
     @GetMapping
     @RequestMapping("/{event_id}/participants", method = [RequestMethod.GET])
-    fun getParticipants(@PathVariable("event_id") eventId: Long): ResponseEntity<List<UserVO>>{
+    fun getParticipants(@PathVariable("event_id") eventId: Long): ResponseEntity<List<UserVO>> {
 
         val participants = eventService.getEventParticipants(eventId)
 
-        return if (participants == null){
+        return if (participants == null) {
             ResponseEntity.ok(
                     mutableListOf()
             )
@@ -83,14 +91,14 @@ class EventController(val eventService: EventService, val eventAssembler: EventA
     }
 
     @PostMapping
-    @RequestMapping(value= ["/{event_id}/set_poster"], consumes = [MediaType.MULTIPART_FORM_DATA_VALUE], method = [RequestMethod.POST])
-    fun setEventPoster(@PathVariable("event_id") id: Long, @RequestParam("file") file: MultipartFile): ResponseEntity<Void>{
+    @RequestMapping(value = ["/{event_id}/set_poster"], consumes = [MediaType.MULTIPART_FORM_DATA_VALUE], method = [RequestMethod.POST])
+    fun setEventPoster(@PathVariable("event_id") id: Long, @RequestParam("file") file: MultipartFile): ResponseEntity<Void> {
         return try {
             eventService.setEventPoster(id, file)
             ResponseEntity
                     .created(URI("${id}/event-picture"))
                     .build()
-        } catch(error: NoSuchElementException){
+        } catch (error: NoSuchElementException) {
             ResponseEntity
                     .notFound()
                     .build()
@@ -99,7 +107,7 @@ class EventController(val eventService: EventService, val eventAssembler: EventA
 
     @GetMapping
     @RequestMapping("/{event_id}/get_poster", method = [RequestMethod.GET])
-    fun getEventPoster(@PathVariable("event_id") id: Long): ResponseEntity<Any>{
+    fun getEventPoster(@PathVariable("event_id") id: Long): ResponseEntity<Any> {
 
         return try {
             val image: ByteArray = eventService.getEventPoster(id)
@@ -109,7 +117,7 @@ class EventController(val eventService: EventService, val eventAssembler: EventA
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"${System.currentTimeMillis()}\"")
                     .body(image)
 
-        } catch(error: NoSuchElementException){
+        } catch (error: NoSuchElementException) {
             ResponseEntity
                     .notFound()
                     .build()

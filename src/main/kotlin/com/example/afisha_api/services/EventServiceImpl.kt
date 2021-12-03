@@ -18,6 +18,12 @@ class EventServiceImpl(val repository: EventRepository) : EventService {
         return repository.findAll().toList()
     }
 
+    override fun getOrganizerEvent(email: String): List<Event> {
+        return repository.findAll().filter {
+            it.organizerEmail == email
+        }
+    }
+
     override fun getEventById(id: Long): Event? {
         return repository.findById(id).orElse(null)
     }
