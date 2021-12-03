@@ -1,5 +1,6 @@
 package com.example.afisha_api.services
 
+import com.example.afisha_api.helpers.UserVO
 import com.example.afisha_api.models.Event
 
 interface EventService {
@@ -12,4 +13,8 @@ interface EventService {
     fun getApproved(): List<Event>
 
     fun getNotApproved(): List<Event>
+
+    fun getEventParticipants(id: Long): List<UserVO>?
+
+    fun deleteEvent(id: Long)
 }

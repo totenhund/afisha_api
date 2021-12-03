@@ -83,8 +83,8 @@ class UserController(
     }
 
     @PostMapping
-    @RequestMapping("/join/{email}/{eventId}", method = [RequestMethod.POST])
-    fun addEvent(@PathVariable("email") email: String, @PathVariable("eventId") eventId: Long): ResponseEntity<Result>{
+    @RequestMapping("/join/{email}/{event_id}", method = [RequestMethod.POST])
+    fun addEvent(@PathVariable("email") email: String, @PathVariable("event_id") eventId: Long): ResponseEntity<Result>{
         userService.addEvent(email, eventId)
         return ok(Result("You subscribed to event!"))
     }
@@ -98,8 +98,8 @@ class UserController(
 
     @PostMapping
     @RequestMapping("/approve_event/{event_id}", method = [RequestMethod.POST])
-    fun submitEvent(@PathVariable("event_id") event_id: Long): ResponseEntity<Result>{
-        val event = eventService.getEventById(event_id)
+    fun submitEvent(@PathVariable("event_id") eventId: Long): ResponseEntity<Result>{
+        val event = eventService.getEventById(eventId)
         event?.let {
             it.status = Event.Status.APPROVED
             eventService.addEvent(it)
@@ -112,6 +112,13 @@ class UserController(
     fun approveOrganizer(@PathVariable("email") email: String): ResponseEntity<Result>{
         userService.approveOrganizer(email)
         return ok(Result("You approved organizer"))
+    }
+
+    @PostMapping
+    @RequestMapping("/{event_id}/{email}/exit", method = [RequestMethod.POST])
+    fun exitEvent(@PathVariable("event_id") eventId: Long, @PathVariable("email") email: String): ResponseEntity<Result>{
+        userService.exitEvent(eventId, email)
+        return ok(Result("You exit event"))
     }
 
 

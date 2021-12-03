@@ -2,6 +2,8 @@ package com.example.afisha_api.controlles
 
 import com.example.afisha_api.components.EventAssembler
 import com.example.afisha_api.helpers.EventVO
+import com.example.afisha_api.helpers.Result
+import com.example.afisha_api.helpers.UserVO
 import com.example.afisha_api.models.Event
 import com.example.afisha_api.services.EventService
 import io.swagger.annotations.Api
@@ -31,8 +33,8 @@ class EventController(val eventService: EventService, val eventAssembler: EventA
     }
 
     @GetMapping
-    @RequestMapping("/{eventId}", method = [RequestMethod.GET])
-    fun getEvent(@PathVariable("eventId") eventId: Long): ResponseEntity<EventVO> {
+    @RequestMapping("/{event_id}", method = [RequestMethod.GET])
+    fun getEvent(@PathVariable("event_id") eventId: Long): ResponseEntity<EventVO> {
         return ResponseEntity.ok(eventService.getEventById(eventId)?.let { eventAssembler.toEventVO(it) })
     }
 
@@ -50,6 +52,30 @@ class EventController(val eventService: EventService, val eventAssembler: EventA
         return ResponseEntity.ok(eventService.getNotApproved().map {
             eventAssembler.toEventVO(it)
         })
+    }
+
+    @PostMapping
+    @RequestMapping("/{event_id}", method = [RequestMethod.POST])
+    fun deleteEvent(@PathVariable("event_id") eventId: Long): ResponseEntity<Result>{
+        eventService.deleteEvent(eventId)
+        return ResponseEntity.ok(Result("Event deleted"))
+    }
+
+    @GetMapping
+    @RequestMapping("/{event_id}/participants", method = [RequestMethod.GET])
+    fun getParticipants(@PathVariable("event_id") eventId: Long): ResponseEntity<List<UserVO>>{
+
+        val participants = eventService.getEventParticipants(eventId)
+
+        return if (participants == null){
+            ResponseEntity.ok(
+                    mutableListOf()
+            )
+        } else {
+            ResponseEntity.ok(
+                    participants
+            )
+        }
     }
 
 }

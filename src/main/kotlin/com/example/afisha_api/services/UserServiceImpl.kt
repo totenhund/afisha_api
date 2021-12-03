@@ -27,8 +27,6 @@ class UserServiceImpl(
         if (existsEmail(user.email)) {
             throw ForbiddenException("User with such email already exists")
         } else {
-
-
             repository.saveAndFlush(User(
                     email = user.email,
                     firstName = user.firstName,
@@ -71,7 +69,23 @@ class UserServiceImpl(
         submissionRepository.save(OrganizerSubmission(userEmail = email))
     }
 
-    override fun exitEvent(eventId: Long) {
+    override fun exitEvent(eventId: Long, email: String) {
+        val event = eventsRepository.findById(eventId).orElse(null)
+        val user = repository.findByEmail(email)
+
+        event?.let {
+            it.participants?.removeAll { user ->
+                user.email == email
+            }
+            eventsRepository.save(it)
+        }
+
+        user?.let {
+            it.events?.removeAll { event ->
+                event.id == eventId
+            }
+            repository.save(user)
+        }
 
     }
 

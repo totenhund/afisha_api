@@ -15,7 +15,7 @@ interface UserService {
 
     fun applyOrganizer(email: String)
 
-    fun exitEvent(eventId: Long)
+    fun exitEvent(eventId: Long, email: String)
 
     fun approveOrganizer(email: String)
 
