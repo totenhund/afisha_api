@@ -4,6 +4,7 @@ import com.example.afisha_api.helpers.UserVO
 import com.example.afisha_api.models.Event
 import com.example.afisha_api.repositories.EventRepository
 import org.springframework.stereotype.Service
+import org.springframework.web.multipart.MultipartFile
 
 @Service
 class EventServiceImpl(val repository: EventRepository) : EventService {
@@ -41,6 +42,19 @@ class EventServiceImpl(val repository: EventRepository) : EventService {
 
     override fun deleteEvent(id: Long) {
         repository.deleteById(id)
+    }
+
+    override fun setEventPoster(id: Long, file: MultipartFile) {
+        val event = repository.findById(id).orElse(null)
+        event?.let {
+            it.eventPicture = file.bytes
+            repository.save(it)
+        }
+    }
+
+    override fun getEventPoster(id: Long): ByteArray {
+        val event = repository.findById(id).orElse(null)
+        return event.eventPicture
     }
 
 

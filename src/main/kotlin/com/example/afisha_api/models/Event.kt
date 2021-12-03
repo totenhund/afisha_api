@@ -16,7 +16,10 @@ class Event(
         var posterUrl: String,
         @ManyToMany(mappedBy = "events")
         var participants: MutableList<User>? = null,
-        var status: Status
+        var status: Status,
+        @Lob
+        @Column(name="event_picture")
+        var eventPicture: ByteArray
 ) {
         enum class Status{
                 APPROVED,

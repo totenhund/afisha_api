@@ -32,5 +32,7 @@ After changes, it is required to rebuild image
 
 cp target/afisha_api-0.0.1-SNAPSHOT.jar src/main/docker
 
+docker rmi docker-afisha-api:latest
+
 docker-compose up
 ```

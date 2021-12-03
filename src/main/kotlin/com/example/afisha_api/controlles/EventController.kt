@@ -7,9 +7,13 @@ import com.example.afisha_api.helpers.UserVO
 import com.example.afisha_api.models.Event
 import com.example.afisha_api.services.EventService
 import io.swagger.annotations.Api
+import org.springframework.http.HttpHeaders
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.multipart.MultipartFile
+import java.net.URI
 
 @RestController
 @RequestMapping("/events")
@@ -76,6 +80,41 @@ class EventController(val eventService: EventService, val eventAssembler: EventA
                     participants
             )
         }
+    }
+
+    @PostMapping
+    @RequestMapping(value= ["/{event_id}/set_poster"], consumes = [MediaType.MULTIPART_FORM_DATA_VALUE], method = [RequestMethod.POST])
+    fun setEventPoster(@PathVariable("event_id") id: Long, @RequestParam("file") file: MultipartFile): ResponseEntity<Void>{
+        return try {
+            eventService.setEventPoster(id, file)
+            ResponseEntity
+                    .created(URI("${id}/event-picture"))
+                    .build()
+        } catch(error: NoSuchElementException){
+            ResponseEntity
+                    .notFound()
+                    .build()
+        }
+    }
+
+    @GetMapping
+    @RequestMapping("/{event_id}/get_poster", method = [RequestMethod.GET])
+    fun getEventPoster(@PathVariable("event_id") id: Long): ResponseEntity<Any>{
+
+        return try {
+            val image: ByteArray = eventService.getEventPoster(id)
+
+            ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(MediaType.IMAGE_JPEG_VALUE))
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"${System.currentTimeMillis()}\"")
+                    .body(image)
+
+        } catch(error: NoSuchElementException){
+            ResponseEntity
+                    .notFound()
+                    .build()
+        }
+
     }
 
 }

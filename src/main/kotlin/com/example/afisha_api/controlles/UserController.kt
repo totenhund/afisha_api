@@ -3,8 +3,10 @@ package com.example.afisha_api.controlles
 import com.example.afisha_api.exceptions.CookieNotFoundException
 import com.example.afisha_api.helpers.*
 import com.example.afisha_api.models.Event
+import com.example.afisha_api.models.OrganizerSubmission
 import com.example.afisha_api.security.RememberMeServiceImpl
 import com.example.afisha_api.services.EventService
+import com.example.afisha_api.services.SubmissionService
 import com.example.afisha_api.services.UserService
 import com.example.afisha_api.utils.SecurityUtil.Companion.getUser
 import com.example.afisha_api.utils.Validator
@@ -32,6 +34,7 @@ class UserController(
     private val authProvider: AuthenticationProvider,
     private val validator: Validator,
     private val rememberMeServices: RememberMeServices,
+    private val submissionService: SubmissionService
 ) {
 
     @Autowired
@@ -108,10 +111,31 @@ class UserController(
     }
 
     @PostMapping
-    @RequestMapping("/approve_organizer/{email}", method = [RequestMethod.POST])
-    fun approveOrganizer(@PathVariable("email") email: String): ResponseEntity<Result>{
+    @RequestMapping("/approve_organizer/{email}/{submission_id}", method = [RequestMethod.POST])
+    fun approveOrganizer(@PathVariable("email") email: String, @PathVariable("submission_id") id: Long): ResponseEntity<Result>{
         userService.approveOrganizer(email)
+        submissionService.deleteSubmission(id)
         return ok(Result("You approved organizer"))
+    }
+
+    @PostMapping
+    @RequestMapping("/cancel_organizer/{submission_id}", method = [RequestMethod.POST])
+    fun cancelOrganizerSubmission(@PathVariable("submission_id") id: Long): ResponseEntity<Result>{
+        submissionService.deleteSubmission(id)
+        return ok(Result("You canceled organizer"))
+    }
+
+    @PostMapping
+    @RequestMapping("/cancel_event/{event_id}", method = [RequestMethod.POST])
+    fun cancelEventSubmission(@PathVariable("event_id") eventId: Long) : ResponseEntity<Result>{
+        eventService.deleteEvent(eventId)
+        return ok(Result("You canceled event"))
+    }
+
+    @GetMapping
+    @RequestMapping("/all_submissions", method = [RequestMethod.GET])
+    fun getSubmission(): ResponseEntity<List<OrganizerSubmission>>{
+        return ok(submissionService.getAllSubmission())
     }
 
     @PostMapping
