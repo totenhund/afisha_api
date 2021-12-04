@@ -15,7 +15,8 @@ class EventAssembler {
                 event.date,
                 event.numberParticipants,
                 event.posterUrl,
-                event.status
+                event.status,
+                event.organizerEmail
         )
     }
 }

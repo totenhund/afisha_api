@@ -11,11 +11,12 @@ data class EventVO(
         var date: String,
         var numberParticipants: String,
         var posterUrl: String,
-        var status: Event.Status
+        var status: Event.Status,
+        var organizerEmail: String
 ) {
     companion object {
         fun buildFrom(event: Event): EventVO {
-            return EventVO(event.id, event.title, event.ageRestriction, event.description, event.date, event.numberParticipants, event.posterUrl, event.status)
+            return EventVO(event.id, event.title, event.ageRestriction, event.description, event.date, event.numberParticipants, event.posterUrl, event.status, event.organizerEmail)
         }
     }
 }
