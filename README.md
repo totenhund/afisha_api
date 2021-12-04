@@ -11,6 +11,8 @@ You can access api documentation after running project
 
 <http://localhost:8080/api/swagger-ui.html#/>
 
+<http://ec2-3-17-146-147.us-east-2.compute.amazonaws.com:8080/api/swagger-ui.html#/>
+
 ![swagger](screenshots/img.png)
 
 It is implemented with swagger
