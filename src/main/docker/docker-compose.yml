@@ -15,6 +15,9 @@ services:
       - SPRING_DATASOURCE_USERNAME=compose-postgres
       - SPRING_DATASOURCE_PASSWORD=compose-postgres
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - MANAGEMENT-ENDPOINTS-WEB-EXPOSURE-INCLUDE=*
+      - MANAGEMENT-SERVER-PORT=9000
+      - MANAGEMENT-ENDPOINT-HEALTH-SHOW-DETAILS=ALWAYS
 
   db:
     image: 'postgres:13.1-alpine'
